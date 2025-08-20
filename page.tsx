@@ -75,7 +75,26 @@ export default function PlanejamentoAlimentar() {
             </button>
           )}
         </div>
+
+        {/* Exemplo de SELECT corrigido */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto mt-12">
+          <h3 className="text-2xl font-bold mb-6 text-gray-800">⚙️ Exemplo Select</h3>
+          <select
+            defaultValue=""
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl 
+                       focus:border-green-500 focus:outline-none 
+                       text-gray-900 bg-white"
+          >
+            <option value="" disabled>Selecione</option>
+            <option value="1200">1200 kcal (perda de peso)</option>
+            <option value="1500">1500 kcal (manutenção leve)</option>
+            <option value="1800">1800 kcal (manutenção)</option>
+            <option value="2000">2000 kcal (ativo)</option>
+            <option value="2500">2500 kcal (muito ativo)</option>
+          </select>
+        </div>
       </main>
     </div>
   );
 }
+
