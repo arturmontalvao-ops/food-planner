@@ -182,3 +182,16 @@ select:-webkit-autofill {
   -webkit-text-fill-color:#111827 !important;
   background-color:#ffffff !important;
 }
+/* ======= FIX GLOBAL PARA CAMPOS ======= */
+input, select, textarea {
+  color: #111827 !important; /* cinzento quase preto */
+  -webkit-text-fill-color: #111827 !important; /* Safari/Chrome */
+  background-color: #ffffff !important;
+  caret-color: #111827 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9CA3AF !important; /* cinzento claro */
+}
+
