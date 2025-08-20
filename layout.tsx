@@ -10,9 +10,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt">
       <head>
-        {/* Força o tema claro para controles nativos de formulário (Firefox/Chrome/Safari) */}
+        {/* Força o esquema de cores claro */}
         <meta name="color-scheme" content="light" />
-        {/* Opcional, ajuda a manter a barra/UA clara em mobile */}
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body>{children}</body>
