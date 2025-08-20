@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍽️ Planejamento Alimentar Inteligente</title>
+    <meta name="description" content="Sistema profissional de planejamento alimentar com IA. Descubra alimentos, planeie sua semana e aproveite ingredientes com inteligência artificial.">
+    <meta name="keywords" content="planejamento alimentar, nutrição, receitas, IA, alimentação saudável">
+    <meta name="author" content="Planejamento Alimentar Inteligente">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="🍽️ Planejamento Alimentar Inteligente">
+    <meta property="og:description" content="Descubra, planeie e optimize sua alimentação com controle calórico e de custos usando IA">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://planejamento-alimentar.vercel.app">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽️</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/css/style.css" as="style">
+    <link rel="preload" href="/js/app.js" as="script">
+</head>
+<body>
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    🍽️ Planejamento Alimentar Inteligente
+                </h1>
+                <p class="hero-subtitle">
+                    Descubra, planeie e optimize a sua alimentação com controlo calórico e de custos usando inteligência artificial avançada
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Alimentos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Receitas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Satisfação</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SEÇÃO DE DESTAQUE -->
+    <section class="food-showcase">
+        <div class="container">
+            <h2 class="section-title">Como Funciona</h2>
+            
+            <div class="showcase-grid">
+                <div class="showcase-card">
+                    <div class="showcase-image"></div>
+                    <div class="showcase-content">
+                        <h3 class="showcase-title">🥗 Descobre o Alimento/Receita</h3>
+                        <p class="showcase-description">
+                            Pesquise qualquer alimento ou receita e receba informações detalhadas com IA.
+                        </p>
+                        <ul class="showcase-features">
+                            <li>Descrição completa do alimento</li>
+                            <li>Curiosidades e história</li>
+                            <li>Valor nutricional detalhado</li>
+                            <li>Preços do mercado português</li>
+                            <li>3 sugestões de receitas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="showcase-card">
+                    <div class="showcase-image"></div>
+                    <div class="showcase-content">
+                        <h3 class="showcase-title">📅 Planeia a Semana</h3>
+                        <p class="showcase-description">
+                            Configure suas preferências e receba um plano alimentar semanal personalizado.
+                        </p>
+                        <ul class="showcase-features">
+                            <li>Controle calórico preciso</li>
+                            <li>Respeito rigoroso ao orçamento</li>
+                            <li>Refeições configuráveis (2-6 por dia)</li>
+                            <li>Lista de compras inteligente</li>
+                            <li>Instruções de preparação</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="showcase-card">
+                    <div class="showcase-image"></div>
+                    <div class="showcase-content">
+                        <h3 class="showcase-title">🏠 O Que Tens em Casa</h3>
+                        <p class="showcase-description">
+                            Liste seus ingredientes disponíveis e receba receitas criativas personalizadas.
+                        </p>
+                        <ul class="showcase-features">
+                            <li>Até 7 ingredientes</li>
+                            <li>3 receitas criativas</li>
+                            <li>Aproveitamento máximo</li>
+                            <li>Custo por pessoa</li>
+                            <li>Instruções detalhadas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NAVEGAÇÃO POR TABS -->
+    <nav class="tab-navigation">
+        <div class="container">
+            <div class="tab-container">
+                <button class="tab-button active" data-section="discover">
+                    <span class="tab-icon">🔍</span>
+                    <span>Descobre o Alimento</span>
+                </button>
+                <button class="tab-button" data-section="plan">
+                    <span class="tab-icon">📅</span>
+                    <span>Planeia a Semana</span>
+                </button>
+                <button class="tab-button" data-section="home">
+                    <span class="tab-icon">🏠</span>
+                    <span>O Que Tens em Casa</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="container">
+        
+        <!-- SEÇÃO 1: DESCOBERTA -->
+        <section id="section-discover" class="content-section">
+            <h2 class="section-title">🔍 Descobre o Alimento/Receita</h2>
+            
+            <div class="form-card">
+                <form id="discover-form">
+                    <div class="form-group">
+                        <label class="form-label" for="search">
+                            <i class="fas fa-search"></i> O que deseja descobrir?
+                        </label>
+                        <input 
+                            type="text" 
+                            id="search" 
+                            name="search" 
+                            class="form-input" 
+                            placeholder="Ex: abacate, bacalhau à brás, quinoa..."
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="type">
+                            <i class="fas fa-tags"></i> Tipo de pesquisa
+                        </label>
+                        <select id="type" name="type" class="form-select" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="food">🥗 Alimento (informações nutricionais e preços)</option>
+                            <option value="recipe">🍳 Receita (origem e modo de preparação)</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i>
+                        Descobrir com IA
+                    </button>
+                </form>
+            </div>
+            
+            <div id="discover-results" class="results-container"></div>
+        </section>
+
+        <!-- SEÇÃO 2: PLANEJAMENTO SEMANAL -->
+        <section id="section-plan" class="content-section section-hidden">
+            <h2 class="section-title">📅 Planeia a Semana</h2>
+            
+            <div class="form-card">
+                <form id="plan-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="calories">
+                                <i class="fas fa-fire"></i> Calorias diárias alvo
+                            </label>
+                            <select id="calories" name="calories" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="1200">1200 kcal (perda de peso)</option>
+                                <option value="1500">1500 kcal (manutenção leve)</option>
+                                <option value="1800">1800 kcal (manutenção)</option>
+                                <option value="2000">2000 kcal (ativo)</option>
+                                <option value="2500">2500 kcal (muito ativo)</option>
+                                <option value="custom">Personalizar</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="budget">
+                                <i class="fas fa-euro-sign"></i> Orçamento semanal
+                            </label>
+                            <select id="budget" name="budget" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="50">50€ (económico)</option>
+                                <option value="100">100€ (equilibrado)</option>
+                                <option value="150">150€ (confortável)</option>
+                                <option value="200">200€ (premium)</option>
+                                <option value="250">250€ (luxo)</option>
+                                <option value="unlimited">Sem limite</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="people">
+                                <i class="fas fa-users"></i> Número de pessoas
+                            </label>
+                            <select id="people" name="people" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="1">1 pessoa</option>
+                                <option value="2">2 pessoas</option>
+                                <option value="3">3 pessoas</option>
+                                <option value="4">4 pessoas</option>
+                                <option value="5">5 pessoas</option>
+                                <option value="6">6 pessoas</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="mealsPerDay">
+                                <i class="fas fa-utensils"></i> Refeições por dia
+                            </label>
+                            <select id="mealsPerDay" name="mealsPerDay" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="2">2 refeições (almoço + jantar)</option>
+                                <option value="3">3 refeições (pequeno-almoço + almoço + jantar)</option>
+                                <option value="4">4 refeições (+ 1 lanche)</option>
+                                <option value="5">5 refeições (+ 2 lanches)</option>
+                                <option value="6">6 refeições (+ ceia)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="cuisine">
+                                <i class="fas fa-globe"></i> Tipo de cozinha
+                            </label>
+                            <select id="cuisine" name="cuisine" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="portuguesa">🇵🇹 Portuguesa</option>
+                                <option value="mediterranea">🫒 Mediterrânea</option>
+                                <option value="italiana">🇮🇹 Italiana</option>
+                                <option value="asiatica">🥢 Asiática</option>
+                                <option value="vegetariana">🌱 Vegetariana</option>
+                                <option value="atleta">💪 Para atletas</option>
+                                <option value="recuperacao">🏥 Recuperação</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="time">
+                                <i class="fas fa-clock"></i> Tempo disponível
+                            </label>
+                            <select id="time" name="time" class="form-select" required>
+                                <option value="">Selecione</option>
+                                <option value="rapido">⚡ Rápido (até 30 min)</option>
+                                <option value="medio">⏱️ Médio (30-60 min)</option>
+                                <option value="demorado">🕒 Demorado (mais de 60 min)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="restrictions">
+                            <i class="fas fa-ban"></i> Restrições alimentares (opcional)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="restrictions" 
+                            name="restrictions" 
+                            class="form-input" 
+                            placeholder="Ex: sem glúten, sem lactose, vegano..."
+                        >
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i>
+                        Gerar Plano Semanal com IA
+                    </button>
+                </form>
+            </div>
+            
+            <div id="plan-results" class="results-container"></div>
+        </section>
+
+        <!-- SEÇÃO 3: INGREDIENTES EM CASA -->
+        <section id="section-home" class="content-section section-hidden">
+            <h2 class="section-title">🏠 O Que Tens em Casa</h2>
+            
+            <div class="form-card">
+                <p style="text-align: center; margin-bottom: 2rem; color: var(--dark-gray);">
+                    Liste até 7 ingredientes que tem em casa e receba 3 receitas criativas personalizadas pela IA
+                </p>
+                
+                <form id="home-form">
+                    <div id="ingredients-container">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-carrot"></i> Ingredientes disponíveis
+                            </label>
+                            <input 
+                                type="text" 
+                                class="form-input ingredient-input" 
+                                placeholder="Ingrediente 1 (ex: tomate)"
+                                required
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input 
+                                type="text" 
+                                class="form-input ingredient-input" 
+                                placeholder="Ingrediente 2 (ex: cebola)"
+                            >
+                        </div>
+                        <div class="form-group">
+                            <input 
+                                type="text" 
+                                class="form-input ingredient-input" 
+                                placeholder="Ingrediente 3 (ex: alho)"
+                            >
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <button type="button" id="add-ingredient" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i>
+                            Adicionar Ingrediente
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i>
+                        Gerar Receitas com IA
+                    </button>
+                </form>
+            </div>
+            
+            <div id="home-results" class="results-container"></div>
+        </section>
+        
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-info-circle"></i> Sobre</a>
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
+                    <a href="#"><i class="fas fa-envelope"></i> Contacto</a>
+                    <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                </div>
+                
+                <p style="margin-top: 2rem; opacity: 0.8;">
+                    &copy; 2025 Planejamento Alimentar Inteligente. 
+                    <br>
+                    <strong>🌟 Coma bem, viva melhor!</strong>
+                </p>
+                
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.6;">
+                    Desenvolvido com ❤️ e 🤖 IA para uma alimentação mais inteligente
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/app.js"></script>
+    
+    <!-- Analytics placeholder -->
+    <script>
+        // Aqui você pode adicionar Google Analytics ou outras ferramentas de análise
+        console.log('🍽️ Planejamento Alimentar Inteligente carregado com sucesso!');
+    </script>
+</body>
+</html>
