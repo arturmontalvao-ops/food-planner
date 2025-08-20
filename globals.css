@@ -182,31 +182,36 @@ body {
 }
 
 /* Inputs customizados */
-.input-custom,
-input[type="text"],
-select {
+.input-custom {
   border: 2px solid var(--medium-gray);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 16px;
   transition: all var(--transition-medium);
-  background: white !important;
-  color: black !important;
+  background: white;
 }
 
-.input-custom:focus,
-input[type="text"]:focus,
-select:focus {
+.input-custom:focus {
   outline: none;
   border-color: var(--primary-green);
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-  background: white !important;
-  color: black !important;
 }
 
-select option {
-  background: white !important;
-  color: black !important;
+/* Selects customizados */
+.select-custom {
+  border: 2px solid var(--medium-gray);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: all var(--transition-medium);
+  background: white;
+  cursor: pointer;
+}
+
+.select-custom:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 /* Loading spinner */
@@ -370,12 +375,6 @@ select option {
   body {
     background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
   }
-
-  /* Garante que inputs continuam legíveis */
-  input, select, option {
-    background: #fff !important;
-    color: #000 !important;
-  }
 }
 
 /* ===== PRINT STYLES ===== */
@@ -394,48 +393,3 @@ select option {
     box-shadow: none !important;
   }
 }
-/* ================== HARD FIX PARA CAMPOS DE FORMULÁRIO ================== */
-/* Usa sempre esquema claro dentro dos inputs/selects */
-:root, body, form, input, select, textarea { color-scheme: light !important; }
-
-/* Força texto escuro e fundo branco em TODOS os campos */
-.force-input-colors input,
-.force-input-colors select,
-.force-input-colors textarea,
-input, select, textarea {
-  color: #111827 !important;              /* gray-900 */
-  -webkit-text-fill-color: #111827 !important; /* Safari/Chrome */
-  background-color: #ffffff !important;
-  caret-color: #111827 !important;
-}
-
-/* Placeholder visível */
-input::placeholder,
-textarea::placeholder {
-  color: #9CA3AF !important;              /* gray-400 */
-}
-::-moz-placeholder { color: #9CA3AF !important; }
-
-/* Opções dos <select> */
-select option {
-  color: #111827 !important;
-  background-color: #ffffff !important;
-}
-
-/* Autofill (Chrome/Safari) */
-input:-webkit-autofill,
-textarea:-webkit-autofill,
-select:-webkit-autofill {
-  -webkit-text-fill-color: #111827 !important;
-  transition: background-color 9999s ease-in-out 0s;
-}
-
-/* Se algum pai tiver .text-white, isto ganha a “luta” */
-.text-white input,
-.text-white select,
-.text-white textarea {
-  color: #111827 !important;
-  -webkit-text-fill-color: #111827 !important;
-  background-color: #ffffff !important;
-}
-
