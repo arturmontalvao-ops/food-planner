@@ -6,9 +6,7 @@ export default function PlanejamentoAlimentar() {
   const [ingredients, setIngredients] = useState<string[]>(['', '', '']);
 
   const addIngredient = () => {
-    if (ingredients.length < 7) {
-      setIngredients([...ingredients, '']);
-    }
+    if (ingredients.length < 7) setIngredients([...ingredients, '']);
   };
 
   const removeIngredient = (index: number) => {
@@ -16,9 +14,9 @@ export default function PlanejamentoAlimentar() {
   };
 
   const updateIngredient = (index: number, value: string) => {
-    const newIngredients = [...ingredients];
-    newIngredients[index] = value;
-    setIngredients(newIngredients);
+    const next = [...ingredients];
+    next[index] = value;
+    setIngredients(next);
   };
 
   return (
@@ -35,7 +33,8 @@ export default function PlanejamentoAlimentar() {
           🏠 O Que Tens em Casa
         </h2>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto">
+        {/* Cartão com “hard fix” de cores */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto force-input-colors">
           <p className="text-center text-gray-600 mb-8">
             Liste até 7 ingredientes
           </p>
@@ -50,6 +49,12 @@ export default function PlanejamentoAlimentar() {
                   className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl 
                              focus:border-green-500 focus:outline-none 
                              text-black placeholder-gray-500 bg-white"
+                  style={{
+                    color: '#111827',
+                    WebkitTextFillColor: '#111827',
+                    backgroundColor: '#ffffff',
+                    caretColor: '#111827',
+                  }}
                   placeholder={`Ingrediente ${index + 1}`}
                 />
                 {index > 2 && (
@@ -76,14 +81,20 @@ export default function PlanejamentoAlimentar() {
           )}
         </div>
 
-        {/* Exemplo de SELECT corrigido */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto mt-12">
+        {/* Exemplo de SELECT corrigido (no mesmo cartão com force-input-colors) */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto mt-12 force-input-colors">
           <h3 className="text-2xl font-bold mb-6 text-gray-800">⚙️ Exemplo Select</h3>
           <select
             defaultValue=""
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl 
                        focus:border-green-500 focus:outline-none 
                        text-gray-900 bg-white"
+            style={{
+              color: '#111827',
+              WebkitTextFillColor: '#111827',
+              backgroundColor: '#ffffff',
+              caretColor: '#111827',
+            }}
           >
             <option value="" disabled>Selecione</option>
             <option value="1200">1200 kcal (perda de peso)</option>
@@ -97,4 +108,3 @@ export default function PlanejamentoAlimentar() {
     </div>
   );
 }
-

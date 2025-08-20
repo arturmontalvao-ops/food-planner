@@ -394,3 +394,48 @@ select option {
     box-shadow: none !important;
   }
 }
+/* ================== HARD FIX PARA CAMPOS DE FORMULÁRIO ================== */
+/* Usa sempre esquema claro dentro dos inputs/selects */
+:root, body, form, input, select, textarea { color-scheme: light !important; }
+
+/* Força texto escuro e fundo branco em TODOS os campos */
+.force-input-colors input,
+.force-input-colors select,
+.force-input-colors textarea,
+input, select, textarea {
+  color: #111827 !important;              /* gray-900 */
+  -webkit-text-fill-color: #111827 !important; /* Safari/Chrome */
+  background-color: #ffffff !important;
+  caret-color: #111827 !important;
+}
+
+/* Placeholder visível */
+input::placeholder,
+textarea::placeholder {
+  color: #9CA3AF !important;              /* gray-400 */
+}
+::-moz-placeholder { color: #9CA3AF !important; }
+
+/* Opções dos <select> */
+select option {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+/* Autofill (Chrome/Safari) */
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #111827 !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Se algum pai tiver .text-white, isto ganha a “luta” */
+.text-white input,
+.text-white select,
+.text-white textarea {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
