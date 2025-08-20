@@ -1,523 +1,396 @@
-'use client';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-import { useState } from 'react';
-
-// ===== TIPOS TYPESCRIPT =====
-interface FoodResult {
-  name: string;
-  description: string;
-  curiosities: string;
-  nutrition: {
-    calories: string;
-    protein: string;
-    carbs: string;
-    fat: string;
-    fiber: string;
-    vitamins: string;
-  };
-  price: {
-    current: string;
-    seasonal: string;
-    comparison: string;
-  };
-  recipes: Array<{
-    name: string;
-    description: string;
-    time: string;
-  }>;
+/* ===== VARIÁVEIS CSS PERSONALIZADAS ===== */
+:root {
+  /* Cores inspiradas em alimentos frescos */
+  --primary-green: #4CAF50;      /* Verde folha */
+  --secondary-orange: #FF9800;    /* Laranja cenoura */
+  --accent-red: #FF5722;         /* Vermelho tomate */
+  --accent-yellow: #FFC107;      /* Amarelo milho */
+  --neutral-brown: #8D6E63;      /* Castanho canela */
+  
+  /* Tons neutros modernos */
+  --white: #FFFFFF;
+  --light-gray: #F5F5F5;
+  --medium-gray: #E0E0E0;
+  --dark-gray: #424242;
+  --text-dark: #212121;
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, var(--primary-green), var(--secondary-orange));
+  --gradient-accent: linear-gradient(135deg, var(--accent-red), var(--accent-yellow));
+  --gradient-subtle: linear-gradient(135deg, var(--light-gray), var(--white));
+  
+  /* Sombras */
+  --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.15);
+  --shadow-heavy: 0 8px 32px rgba(0,0,0,0.2);
+  
+  /* Transições */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
-interface RecipeResult {
-  name: string;
-  history: string;
-  ingredients: Array<{
-    item: string;
-    quantity: string;
-    cost: string;
-  }>;
-  instructions: string[];
-  timing: {
-    prep: string;
-    cooking: string;
-    total: string;
-  };
-  difficulty: string;
-  cost: {
-    breakdown: string;
-    total: string;
-    per_person: string;
-    tips: string;
-  };
+/* ===== BASE STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-// ===== COMPONENTE PRINCIPAL =====
-export default function PlanejamentoAlimentar() {
-  const [currentSection, setCurrentSection] = useState<'discover' | 'plan' | 'home'>('discover');
-  const [isLoading, setIsLoading] = useState(false);
-  const [discoverResults, setDiscoverResults] = useState<any>(null);
-  const [planResults, setPlanResults] = useState<any>(null);
-  const [homeResults, setHomeResults] = useState<any>(null);
-  const [ingredients, setIngredients] = useState<string[]>(['', '', '']);
+html {
+  scroll-behavior: smooth;
+}
 
-  // ===== FUNÇÕES DA API =====
-  const callAPI = async (endpoint: string, data: any) => {
-    const response = await fetch(`/api/${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-    return response.json();
-  };
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: var(--gradient-subtle);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  const handleDiscover = async (search: string, type: 'food' | 'recipe') => {
-    setIsLoading(true);
-    try {
-      const result = await callAPI('discover', { search, type });
-      setDiscoverResults(result);
-    } catch (error) {
-      console.error('Erro na descoberta:', error);
-      alert('Erro ao processar solicitação. Tente novamente.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+/* ===== UTILITY CLASSES ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
 
-  const handlePlan = async (preferences: any) => {
-    setIsLoading(true);
-    try {
-      const result = await callAPI('plan-week', preferences);
-      setPlanResults(result);
-    } catch (error) {
-      console.error('Erro no planejamento:', error);
-      alert('Erro ao gerar plano. Tente novamente.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+/* ===== ANIMAÇÕES PERSONALIZADAS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  const handleHome = async (ingredientsList: string[]) => {
-    const filteredIngredients = ingredientsList.filter((ing) => ing.trim().length > 0);
-    if (filteredIngredients.length === 0) {
-      alert('Adicione pelo menos um ingrediente');
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const result = await callAPI('home-recipes', { ingredients: filteredIngredients });
-      setHomeResults(result);
-    } catch (error) {
-      console.error('Erro nas receitas:', error);
-      alert('Erro ao gerar receitas. Tente novamente.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-  const addIngredient = () => {
-    if (ingredients.length < 7) setIngredients([...ingredients, '']);
-  };
-  const removeIngredient = (index: number) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
-  const updateIngredient = (index: number, value: string) => {
-    const next = [...ingredients];
-    next[index] = value;
-    setIngredients(next);
-  };
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-orange-50">
-      {/* ===== HEADER HERO ===== */}
-      <header className="hero-header bg-gradient-to-r from-green-500 to-orange-500 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4 animate-fade-in-up">🍽️ Planejamento Alimentar Inteligente</h1>
-          <p className="text-xl mb-8 max-w-3xl mx-auto opacity-95">
-            Descubra, planeie e optimize a sua alimentação com controlo calórico e de custos usando inteligência artificial avançada
-          </p>
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0,0,0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
 
-          <div className="flex justify-center gap-8 flex-wrap">
-            <div className="text-center">
-              <span className="block text-3xl font-bold text-yellow-300">1000+</span>
-              <span className="text-sm opacity-90">Alimentos</span>
-            </div>
-            <div className="text-center">
-              <span className="block text-3xl font-bold text-yellow-300">500+</span>
-              <span className="text-sm opacity-90">Receitas</span>
-            </div>
-            <div className="text-center">
-              <span className="block text-3xl font-bold text-yellow-300">95%</span>
-              <span className="text-sm opacity-90">Satisfação</span>
-            </div>
-          </div>
-        </div>
-      </header>
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease;
+}
 
-      {/* ===== NAVEGAÇÃO POR TABS ===== */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center py-4 gap-4 flex-wrap">
-            <button
-              onClick={() => setCurrentSection('discover')}
-              className={`tab-button px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 ${
-                currentSection === 'discover'
-                  ? 'bg-gradient-to-r from-green-500 to-orange-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <span>🔍</span>
-              <span>Descobre o Alimento</span>
-            </button>
-            <button
-              onClick={() => setCurrentSection('plan')}
-              className={`tab-button px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 ${
-                currentSection === 'plan'
-                  ? 'bg-gradient-to-r from-green-500 to-orange-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <span>📅</span>
-              <span>Planeia a Semana</span>
-            </button>
-            <button
-              onClick={() => setCurrentSection('home')}
-              className={`tab-button px-6 py-3 rounded-full font-semibold transition-all flex items-center gap-2 ${
-                currentSection === 'home'
-                  ? 'bg-gradient-to-r from-green-500 to-orange-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <span>🏠</span>
-              <span>O Que Tens em Casa</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+.animate-pulse-custom {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
-      {/* ===== CONTEÚDO PRINCIPAL ===== */}
-      <main className="py-16">
-        <div className="container mx-auto px-4">
-          {/* ==== DESCOBERTA ==== */}
-          {currentSection === 'discover' && (
-            <section className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">🔍 Descobre o Alimento/Receita</h2>
+.animate-bounce-custom {
+  animation: bounce 2s infinite;
+}
 
-              <div className="bg-white rounded-2xl shadow-xl p-8">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target as HTMLFormElement);
-                    const search = formData.get('search') as string;
-                    const type = formData.get('type') as 'food' | 'recipe';
-                    if (search && type) handleDiscover(search, type);
-                  }}
-                >
-                  <div className="mb-6">
-                    <label className="block text-lg font-semibold text-gray-700 mb-2">🔍 O que deseja descobrir?</label>
-                    <input
-                      type="text"
-                      name="search"
-                      className="input-custom w-full text-black placeholder-gray-500 bg-white"
-                      placeholder="Ex: abacate, bacalhau à brás, quinoa..."
-                      required
-                    />
-                  </div>
+/* ===== COMPONENTES PERSONALIZADOS ===== */
 
-                  <div className="mb-8">
-                    <label className="block text-lg font-semibold text-gray-700 mb-2">🏷️ Tipo de pesquisa</label>
-                    <select
-                      name="type"
-                      defaultValue=""
-                      className="select-custom w-full text-gray-900 bg-white"
-                      required
-                    >
-                      <option value="" disabled>
-                        Selecione o tipo
-                      </option>
-                      <option value="food">🥗 Alimento (informações nutricionais e preços)</option>
-                      <option value="recipe">🍳 Receita (origem e modo de preparação)</option>
-                    </select>
-                  </div>
+/* Header Hero */
+.hero-header {
+  position: relative;
+  overflow: hidden;
+}
 
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full btn-gradient py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all disabled:opacity-50"
-                  >
-                    {isLoading ? '🔄 Processando...' : '✨ Descobrir com IA'}
-                  </button>
-                </form>
+.hero-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="food-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23food-pattern)"/></svg>');
+  opacity: 0.3;
+}
 
-                {discoverResults && (
-                  <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-                    <h3 className="text-xl font-bold mb-4">📋 Resultados:</h3>
-                    <pre className="result-json">{JSON.stringify(discoverResults, null, 2)}</pre>
-                  </div>
-                )}
-              </div>
-            </section>
-          )}
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
 
-          {/* ==== PLANEAMENTO ==== */}
-          {currentSection === 'plan' && (
-            <section className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">📅 Planeia a Semana</h2>
+/* Cards com hover effects */
+.card-hover {
+  transition: all var(--transition-medium);
+}
 
-              <div className="bg-white rounded-2xl shadow-xl p-8">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target as HTMLFormElement);
-                    const preferences = {
-                      calories: formData.get('calories'),
-                      budget: formData.get('budget'),
-                      people: formData.get('people'),
-                      mealsPerDay: formData.get('mealsPerDay'),
-                      cuisine: formData.get('cuisine'),
-                      time: formData.get('time'),
-                      restrictions: formData.get('restrictions') || '',
-                    };
-                    handlePlan(preferences);
-                  }}
-                >
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-700 mb-2">🔥 Calorias diárias alvo</label>
-                      <select
-                        name="calories"
-                        defaultValue=""
-                        className="select-custom w-full text-gray-900 bg-white"
-                        required
-                      >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        <option value="1200">1200 kcal (perda de peso)</option>
-                        <option value="1500">1500 kcal (manutenção leve)</option>
-                        <option value="1800">1800 kcal (manutenção)</option>
-                        <option value="2000">2000 kcal (ativo)</option>
-                        <option value="2500">2500 kcal (muito ativo)</option>
-                      </select>
-                    </div>
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-heavy);
+}
 
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-700 mb-2">💰 Orçamento semanal</label>
-                      <select
-                        name="budget"
-                        defaultValue=""
-                        className="select-custom w-full text-gray-900 bg-white"
-                        required
-                      >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        <option value="50">50€ (económico)</option>
-                        <option value="100">100€ (equilibrado)</option>
-                        <option value="150">150€ (confortável)</option>
-                        <option value="200">200€ (premium)</option>
-                        <option value="250">250€ (luxo)</option>
-                      </select>
-                    </div>
-                  </div>
+/* Botões gradiente */
+.btn-gradient {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+  font-weight: 600;
+  transition: all var(--transition-medium);
+  position: relative;
+  overflow: hidden;
+}
 
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-700 mb-2">👥 Número de pessoas</label>
-                      <select
-                        name="people"
-                        defaultValue=""
-                        className="select-custom w-full text-gray-900 bg-white"
-                        required
-                      >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        <option value="1">1 pessoa</option>
-                        <option value="2">2 pessoas</option>
-                        <option value="3">3 pessoas</option>
-                        <option value="4">4 pessoas</option>
-                        <option value="5">5 pessoas</option>
-                        <option value="6">6 pessoas</option>
-                      </select>
-                    </div>
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left var(--transition-slow);
+}
 
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-700 mb-2">🍽️ Refeições por dia</label>
-                      <select
-                        name="mealsPerDay"
-                        defaultValue=""
-                        className="select-custom w-full text-gray-900 bg-white"
-                        required
-                      >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        <option value="2">2 refeições</option>
-                        <option value="3">3 refeições</option>
-                        <option value="4">4 refeições (+ 1 lanche)</option>
-                        <option value="5">5 refeições (+ 2 lanches)</option>
-                        <option value="6">6 refeições (+ ceia)</option>
-                      </select>
-                    </div>
-                  </div>
+.btn-gradient:hover::before {
+  left: 100%;
+}
 
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-700 mb-2">🌍 Tipo de cozinha</label>
-                      <select
-                        name="cuisine"
-                        defaultValue=""
-                        className="select-custom w-full text-gray-900 bg-white"
-                        required
-                      >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        <option value="portuguesa">🇵🇹 Portuguesa</option>
-                        <option value="mediterranea">🫒 Mediterrânea</option>
-                        <option value="italiana">🇮🇹 Italiana</option>
-                        <option value="asiatica">🥢 Asiática</option>
-                        <option value="vegetariana">🌱 Vegetariana</option>
-                      </select>
-                    </div>
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
 
-                    <div>
-                      <label className="block text-lg font-semibold text-gray-700 mb-2">⏰ Tempo disponível</label>
-                      <select
-                        name="time"
-                        defaultValue=""
-                        className="select-custom w-full text-gray-900 bg-white"
-                        required
-                      >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        <option value="rapido">⚡ Rápido (até 30 min)</option>
-                        <option value="medio">⏱️ Médio (30-60 min)</option>
-                        <option value="demorado">🕒 Demorado (mais de 60 min)</option>
-                      </select>
-                    </div>
-                  </div>
+/* Inputs customizados */
+.input-custom,
+input[type="text"],
+select {
+  border: 2px solid var(--medium-gray);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: all var(--transition-medium);
+  background: white !important;
+  color: black !important;
+}
 
-                  <div className="mb-8">
-                    <label className="block text-lg font-semibold text-gray-700 mb-2">
-                      🚫 Restrições alimentares (opcional)
-                    </label>
-                    <input
-                      type="text"
-                      name="restrictions"
-                      className="input-custom w-full text-black placeholder-gray-500 bg-white"
-                      placeholder="Ex: sem glúten, sem lactose, vegano..."
-                    />
-                  </div>
+.input-custom:focus,
+input[type="text"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  background: white !important;
+  color: black !important;
+}
 
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full btn-gradient py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all disabled:opacity-50"
-                  >
-                    {isLoading ? '🔄 Gerando plano...' : '✨ Gerar Plano Semanal com IA'}
-                  </button>
-                </form>
+select option {
+  background: white !important;
+  color: black !important;
+}
 
-                {planResults && (
-                  <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-                    <h3 className="text-xl font-bold mb-4">📋 Seu Plano Semanal:</h3>
-                    <pre className="result-json">{JSON.stringify(planResults, null, 2)}</pre>
-                  </div>
-                )}
-              </div>
-            </section>
-          )}
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--medium-gray);
+  border-top: 4px solid var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 
-          {/* ==== INGREDIENTES EM CASA ==== */}
-          {currentSection === 'home' && (
-            <section className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold text-center mb-12 text-gray-800">🏠 O Que Tens em Casa</h2>
+/* Mensagens de erro e sucesso */
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #c62828;
+  margin: 16px 0;
+}
 
-              <div className="bg-white rounded-2xl shadow-xl p-8">
-                <p className="text-center text-gray-600 mb-8">
-                  Liste até 7 ingredientes que tem em casa e receba 3 receitas criativas personalizadas pela IA
-                </p>
+.success-message {
+  background: #e8f5e8;
+  color: #2e7d32;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #2e7d32;
+  margin: 16px 0;
+}
 
-                <div className="space-y-4 mb-8">
-                  {ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={ingredient}
-                        onChange={(e) => updateIngredient(index, e.target.value)}
-                        className="input-custom flex-1 text-black placeholder-gray-500 bg-white"
-                        placeholder={`Ingrediente ${index + 1} (ex: tomate, cebola, alho...)`}
-                      />
-                      {index > 2 && (
-                        <button
-                          type="button"
-                          onClick={() => removeIngredient(index)}
-                          className="px-4 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
+/* Resultados com syntax highlighting */
+.result-json {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow: auto;
+  max-height: 400px;
+}
 
-                {ingredients.length < 7 && (
-                  <div className="text-center mb-8">
-                    <button
-                      type="button"
-                      onClick={addIngredient}
-                      className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors"
-                    >
-                      ➕ Adicionar Ingrediente
-                    </button>
-                  </div>
-                )}
+/* Tabs navegação */
+.tab-button {
+  transition: all var(--transition-medium);
+  position: relative;
+}
 
-                <button
-                  onClick={() => handleHome(ingredients)}
-                  disabled={isLoading}
-                  className="w-full btn-gradient text-white py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all disabled:opacity-50"
-                >
-                  {isLoading ? '🔄 Criando receitas...' : '✨ Gerar Receitas com IA'}
-                </button>
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 1.5px;
+}
 
-                {homeResults && (
-                  <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-                    <h3 className="text-xl font-bold mb-4">👨‍🍳 Suas Receitas Criativas:</h3>
-                    <pre className="result-json">{JSON.stringify(homeResults, null, 2)}</pre>
-                  </div>
-                )}
-              </div>
-            </section>
-          )}
-        </div>
-      </main>
+/* Tags de ingredientes */
+.ingredient-tag {
+  display: inline-block;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 4px;
+}
 
-      {/* ===== FOOTER ===== */}
-      <footer className="bg-gray-800 text-white py-12 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex justify-center gap-8 mb-6 flex-wrap">
-            <a href="#" className="hover:text-green-400 transition-colors">
-              ℹ️ Sobre
-            </a>
-            <a href="#" className="hover:text-green-400 transition-colors">
-              🔒 Privacidade
-            </a>
-            <a href="#" className="hover:text-green-400 transition-colors">
-              📧 Contacto
-            </a>
-            <a href="#" className="hover:text-green-400 transition-colors">
-              💻 GitHub
-            </a>
-          </div>
+/* Scroll personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-          <p className="mb-4 opacity-80">&copy; 2025 Planejamento Alimentar Inteligente.</p>
-          <p className="font-bold text-lg">🌟 Coma bem, viva melhor!</p>
-          <p className="text-sm opacity-60 mt-2">Desenvolvido com ❤️ e 🤖 IA para uma alimentação mais inteligente</p>
-        </div>
-      </footer>
-    </div>
-  );
+::-webkit-scrollbar-track {
+  background: var(--light-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #45a049;
+}
+
+/* ===== CLASSES UTILITÁRIAS EXTRAS ===== */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-food {
+  background: var(--gradient-primary);
+}
+
+.shadow-food {
+  box-shadow: var(--shadow-medium);
+}
+
+.shadow-food-heavy {
+  box-shadow: var(--shadow-heavy);
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .hero-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-header p {
+    font-size: 1.1rem;
+  }
+  
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+  
+  .text-responsive {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-header h1 {
+    font-size: 2rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .btn-full-mobile {
+    width: 100%;
+  }
+}
+
+/* ===== DARK MODE SUPPORT (PREPARADO) ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-dark: #f5f5f5;
+    --white: #1a1a1a;
+    --light-gray: #2d2d2d;
+    --medium-gray: #404040;
+    --dark-gray: #e0e0e0;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  }
+
+  /* Garante que inputs continuam legíveis */
+  input, select, option {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .shadow-food,
+  .shadow-food-heavy {
+    box-shadow: none !important;
+  }
 }
